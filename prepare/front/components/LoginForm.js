@@ -3,8 +3,9 @@ import React, { useCallback } from 'react'; // useCallback: 함수를 캐싱, us
 import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 
+import { loginAction } from '../reducers/user';
 import useInput from '../hooks/useInput';
 
 const ButtonWrapper = styled.div`
@@ -15,7 +16,8 @@ const FormWrapper = styled(Form)`
 padding: 10px;
 `;
 
-const LoginForm = (setIsLoggedIn) => {
+const LoginForm = () => {
+  const dispatch = useDispatch(); // store.dispatch와 같음.
   const [id, onChangeId] = useInput('');
   const [password, onChangePassword] = useInput('');
 
@@ -34,7 +36,7 @@ const LoginForm = (setIsLoggedIn) => {
 
   const onSubmitForm = useCallback(() => {
     console.log(id, password);
-    setIsLoggedIn(true); // 더미데이터로 받아옴
+    dispatch(loginAction(id, password)); // reducer에서 가져옴 
   }, [id, password]);
 
   return ( // return 부분이 vertual-dom이라고 생각하면 됨.
@@ -69,8 +71,5 @@ const LoginForm = (setIsLoggedIn) => {
   );
 };
 
-LoginForm.propTypes = {
-  setIsLoggedIn: PropTypes.func.isRequired,
-};
 
 export default LoginForm;
